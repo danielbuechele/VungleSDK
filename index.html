@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Vungle Ad SDK by Vungle</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Vungle Ad SDK</h1>
+<p>A collection of Vungle SDKs for download attribution</p>
+        <p class="view"><a href="https://github.com/Vungle/AdvertiserSDK">View the Project on GitHub <small>Vungle/AdvertiserSDK</small></a></p>
+        <ul>
+          <li><a href="https://github.com/Vungle/AdvertiserSDK/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Vungle/AdvertiserSDK/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Vungle/AdvertiserSDK">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Vungle Advertiser SDK</h1>
+
+<p>This project is a collection of SDKs for iOS and Android that aid download attribution for Vungle's advertisers. </p>
+
+<h2>Tracking Downloads</h2>
+
+<p><em>note: If you are already using the iOS or Android publisher SDK, you do not need to track downloads through ways documented in this file. The publisher SDK, if embedded in your app, will automatically do it for you.</em></p>
+
+<h3>How we identify users</h3>
+
+<p><strong>OpenUDID</strong></p>
+
+<p>We're using the open source, industry accepted version of UDID, called [<a href="https://github.com/ylechelle/OpenUDID">https://github.com/ylechelle/OpenUDID</a> OpenUDID]. This identifier is generated on each device, and provides publishers and advertisers a way to track the performance of their campaigns. We will never use the OpenUDID in conjunction with any PII that may compromise your users privacy or security.</p>
+
+<h1>iOS</h1>
+
+<p>Add a few source files that will easily handle download reporting for you.</p>
+
+<h3>VGDownload iOS Module</h3>
+
+<p>This module can be added to your iOS application to track app downloads. To use
+it, drag these four files into your project:</p>
+
+<ul>
+<li>VGDownload.m</li>
+<li>VGDownload.h</li>
+<li>OpenUDID.m</li>
+<li>OpenUDID.h</li>
+</ul><p>Call the function VGReportDownload() from your
+application delegate's startup method, which likely goes by this name:</p>
+
+<div class="highlight">
+<pre><span class="k">-</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span><span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span>
+</pre>
+</div>
+
+
+<h1>Android</h1>
+
+<ol>
+<li>Extract the source to your project's workspace</li>
+<li>Drop the 'src' folder to your local project</li>
+<li>Remove the "Demo.java" from the src if you don't want usage examples.</li>
+<li>In your main application class, add the following to the onCreate method:</li>
+</ol><div class="highlight">
+<pre><span class="n">Vungle</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</pre>
+</div>
+
+
+<p>Visit your dashboard and check if installs get reported for your app. If you don't see them appear, check if you've set up the correct Application ID in the dashboard.</p>
+
+<h1>Server Side API</h1>
+
+<p>Please email tech@vungle.com for more information on how a server to server integration can be used for download attribution.</p>
+
+<h2>Collaborators</h2>
+
+<ul>
+<li>15 Author: Bryant Chou <a href="mailto:bryant.chou@vungle.com">bryant.chou@vungle.com</a>
+</li>
+<li>1 Author: Matt Coneybeare <a href="mailto:coneybeare@gmail.com">coneybeare@gmail.com</a>
+</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/Vungle">Vungle</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
