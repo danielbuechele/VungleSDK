@@ -8,10 +8,18 @@
 /*                                                                            */
 /******************************************************************************/
 
+#if __cplusplus
+extern "C" {
+#endif
+
 // call this at app startup
 
 void VGReportDownload(NSString* appID);
 
+
+#if __cplusplus
+}
+#endif
 
 /******************************************************************************/
 /*                                                                            */
