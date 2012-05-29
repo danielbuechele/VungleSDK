@@ -38,6 +38,8 @@ void VGReportDownload(NSString* appID);
 
 // instance methods
 
++(NSString *)getOpenUDID;
+
 -(void)reportAppInstall:(NSString*)URL;
 
 @end

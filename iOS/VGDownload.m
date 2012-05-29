@@ -158,6 +158,11 @@ void VGReportDownload(NSString* appID)
     [super dealloc];
 }
 
++(NSString *)getOpenUDID
+{
+    return systemIdentifier();
+}
+
 -(id)init
 {
     self = [super init];
