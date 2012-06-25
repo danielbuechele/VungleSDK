@@ -11,3 +11,19 @@
 @interface VGAnalytics : NSObject
 
 @end
+
+
+@protocol VGAnalyticsDelegate <NSObject>
+@optional
+
+/*  
+ Notifies the delegate that the Actions have been uploaded
+ */
+- (void)VGAnalytics:(VGAnalytics *) VGAnalytics didUploadActions:(NSArray *) Actions;
+
+/*
+ Notifies the delegate that there was an error while uploading the Actions
+*/
+- (void)VGAnalytics:(VGAnalytics *) VGAnalytics didFailToUploadActions:(NSArray *) Actions withError:(NSError *) error;
+
+@end
