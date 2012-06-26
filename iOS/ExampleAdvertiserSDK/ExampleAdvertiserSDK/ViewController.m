@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "VGAnalytics.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    NSMutableArray *dict = [[NSMutableArray alloc] init];
+//    NSDictionary *x;
+//    NSData *data = nil;
+//    for(int i = 0;i<20;i++)
+//    {
+//        x = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:i], @"color", nil];
+//        [dict addObject:x];
+//        
+//    }
+//    
+//    NSLog(@"%@",dict);
+//    
+//    data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
+//    NSString *postBody = [NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+//    
+//    NSLog(@"POST BODAYYYYEEEE %@",postBody);
+//    NSLog(@"%@",dict);
     
 	// Do any additional setup after loading the view, typically from a nib.
 }

@@ -32,12 +32,12 @@
 		4399C0801598EE5A00287DE2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4399C0821598EE5A00287DE2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4399C0831598EE5A00287DE2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		4399C08E1598F04600287DE2 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		4399C08F1598F04600287DE2 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
 		4399C0901598F04600287DE2 /* VGDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGDownload.h; sourceTree = "<group>"; };
 		4399C0911598F04600287DE2 /* VGDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGDownload.m; sourceTree = "<group>"; };
 		4399C0941598F77500287DE2 /* VGAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGAnalytics.h; sourceTree = "<group>"; };
-		4399C0951598F77500287DE2 /* VGAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGAnalytics.m; sourceTree = "<group>"; };
+		4399C0951598F77500287DE2 /* VGAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = VGAnalytics.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4399C0B01599565300287DE2 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				4399C0761598EE5A00287DE2 /* ExampleAdvertiserSDK */,
+				4399C0771598EE5A00287DE2 /* Supporting Files */,
 				4399C06F1598EE5A00287DE2 /* Frameworks */,
 				4399C06D1598EE5A00287DE2 /* Products */,
 			);
@@ -89,7 +90,6 @@
 				4399C0821598EE5A00287DE2 /* ViewController.h */,
 				4399C0831598EE5A00287DE2 /* ViewController.m */,
 				4399C08D1598F04600287DE2 /* lib */,
-				4399C0771598EE5A00287DE2 /* Supporting Files */,
 			);
 			path = ExampleAdvertiserSDK;
 			sourceTree = "<group>";
@@ -103,12 +103,13 @@
 				4399C07E1598EE5A00287DE2 /* ExampleAdvertiserSDK-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = ExampleAdvertiserSDK;
 			sourceTree = "<group>";
 		};
 		4399C08D1598F04600287DE2 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				4399C08E1598F04600287DE2 /* OpenUDID.h */,
+				4399C0B01599565300287DE2 /* OpenUDID.h */,
 				4399C08F1598F04600287DE2 /* OpenUDID.m */,
 				4399C0901598F04600287DE2 /* VGDownload.h */,
 				4399C0911598F04600287DE2 /* VGDownload.m */,
@@ -289,6 +290,7 @@
 				4399C08C1598EE5A00287DE2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

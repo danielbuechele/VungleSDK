@@ -8,10 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VGAnalytics : NSObject
-
-@end
-
+@class VGAnalytics;
 
 @protocol VGAnalyticsDelegate <NSObject>
 @optional
@@ -25,5 +22,28 @@
  Notifies the delegate that there was an error while uploading the Actions
 */
 - (void)VGAnalytics:(VGAnalytics *) VGAnalytics didFailToUploadActions:(NSArray *) Actions withError:(NSError *) error;
+
+@end
+
+static const NSUInteger kVGInterval = 30;
+
+@interface VGAnalytics : NSObject {
+    NSString *appId;
+    NSMutableArray *allActions;
+    NSArray *actions;
+    NSString* analyticsURL;
+    NSMutableDictionary *userProperties;
+    BOOL sendOnBackground;
+    id<VGAnalyticsDelegate> delegate;
+    NSUInteger uploadInterval;
+    UIBackgroundTaskIdentifier taskId;
+}
+
++(id)sharedTool;
+
+-(id)initWithAppId:(NSString *)AppId;
+
+-(NSString*)getVersion;
+-(NSString*)getiOSVersion;
 
 @end
