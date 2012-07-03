@@ -36,13 +36,16 @@ static const NSUInteger kVGInterval = 30;
     BOOL sendOnBackground;
     id<VGAnalyticsDelegate> delegate;
     NSUInteger uploadInterval;
-    UIBackgroundTaskIdentifier taskId;
+    UIBackgroundTaskIdentifier taskIdentCard;
 }
 
 +(id)sharedTool;
 
 -(id)initWithAppId:(NSString *)AppId;
 
+-(void)sendData;
+
+-(NSString*)findReachability;
 -(NSString*)getVersion;
 -(NSString*)getiOSVersion;
 

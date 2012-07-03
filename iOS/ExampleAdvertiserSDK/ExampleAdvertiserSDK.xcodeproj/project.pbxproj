@@ -16,7 +16,8 @@
 		4399C0841598EE5A00287DE2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4399C0831598EE5A00287DE2 /* ViewController.m */; };
 		4399C0921598F04600287DE2 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4399C08F1598F04600287DE2 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4399C0931598F04600287DE2 /* VGDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4399C0911598F04600287DE2 /* VGDownload.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4399C0961598F77500287DE2 /* VGAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4399C0951598F77500287DE2 /* VGAnalytics.m */; };
+		4399C0961598F77500287DE2 /* VGAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4399C0951598F77500287DE2 /* VGAnalytics.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		43F58CF915A27BBE0080C366 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F58CF815A27BBE0080C366 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		4399C0941598F77500287DE2 /* VGAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGAnalytics.h; sourceTree = "<group>"; };
 		4399C0951598F77500287DE2 /* VGAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = VGAnalytics.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4399C0B01599565300287DE2 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		43F58CF815A27BBE0080C366 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F58CF915A27BBE0080C366 /* SystemConfiguration.framework in Frameworks */,
 				4399C0711598EE5A00287DE2 /* UIKit.framework in Frameworks */,
 				4399C0731598EE5A00287DE2 /* Foundation.framework in Frameworks */,
 				4399C0751598EE5A00287DE2 /* CoreGraphics.framework in Frameworks */,
@@ -75,6 +78,7 @@
 		4399C06F1598EE5A00287DE2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43F58CF815A27BBE0080C366 /* SystemConfiguration.framework */,
 				4399C0701598EE5A00287DE2 /* UIKit.framework */,
 				4399C0721598EE5A00287DE2 /* Foundation.framework */,
 				4399C0741598EE5A00287DE2 /* CoreGraphics.framework */,

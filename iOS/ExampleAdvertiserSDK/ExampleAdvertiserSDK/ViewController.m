@@ -19,6 +19,10 @@
 {
     [super viewDidLoad];
     
+    VGAnalytics *ana = [[VGAnalytics alloc] initWithAppId:@"HelloWorld!"];
+    
+    NSLog(@"reachability: %@ ", [ana findReachability]);
+    [ana sendData];
 //    NSMutableArray *dict = [[NSMutableArray alloc] init];
 //    NSDictionary *x;
 //    NSData *data = nil;

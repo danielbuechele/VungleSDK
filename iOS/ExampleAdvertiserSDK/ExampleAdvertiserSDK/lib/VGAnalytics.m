@@ -7,7 +7,9 @@
 //
 
 #import "VGAnalytics.h"
-
+#import "VGDownload.h"
+#include <netinet/in.h>
+#import "SystemConfiguration/SCNetworkReachability.h"
 
 @interface VGAnalytics ()
 @property(nonatomic,retain) NSString *appId;
@@ -21,7 +23,9 @@
 @property(nonatomic,retain) NSMutableData *responseData;
 @property(nonatomic,retain) id<VGAnalyticsDelegate> delegate;
 
--(void)sendData;
+-(void)start;
+-(void)endBackgroundTask;
+//-(void)sendData;
 -(NSString*)filePath;
 -(void)readSavedData;
 -(void)saveData;
@@ -29,6 +33,9 @@
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
 @end
+
+static NSString* VGContentJSON = @"application/json";
+static NSString* VGContentType = @"Content-Type";
 
 @implementation VGAnalytics
 @synthesize appId, sendOnBackground, userProperties, connection, delegate;
@@ -50,7 +57,7 @@ static VGAnalytics *sharedInstance = nil;
 {
     if ((self = [self init])) {
         self.appId = AppId;
-        //[self start];
+        [self start];
     }
     return  self;
 }
@@ -78,30 +85,99 @@ static VGAnalytics *sharedInstance = nil;
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"VGAnalytics.plist"];
 }
 
+- (void) start {
+    sharedInstance = self;
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+		
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
+        
+        taskIdentCard = UIBackgroundTaskInvalid;
+        if (&UIApplicationDidEnterBackgroundNotification) {
+            [notificationCenter addObserver:self 
+                                   selector:@selector(applicationDidEnterBackground:) 
+                                       name:UIApplicationDidEnterBackgroundNotification 
+                                     object:nil];
+        }
+        if (&UIApplicationWillEnterForegroundNotification) {
+            [notificationCenter addObserver:self 
+                                   selector:@selector(applicationWillEnterForeground:) 
+                                       name:UIApplicationWillEnterForegroundNotification 
+                                     object:nil];
+        }
+    }
+
+    [notificationCenter addObserver:self 
+                           selector:@selector(applicationWillTerminate:) 
+                               name:UIApplicationWillTerminateNotification 
+                             object:nil];
+    
+    [self readSavedData];
+    [self sendData];
+    [self setUploadInterval:uploadInterval];
+}
+
+-(NSString*)findReachability
+{
+    SCNetworkReachabilityFlags flags = 0;
+    static SCNetworkReachabilityRef sReach;
+    struct sockaddr_in  addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_len = sizeof(addr);
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(0);
+    addr.sin_port        = htons(0);
+    const struct sockaddr_in  sock = addr;
+    const struct sockaddr*    sptr = (const struct sockaddr*) &sock;
+    
+    sReach = SCNetworkReachabilityCreateWithAddress(NULL, sptr);
+    SCNetworkReachabilityGetFlags(sReach, &flags);
+    if (sReach) {
+        CFRelease(sReach);        
+    }
+    if (!(flags & kSCNetworkFlagsReachable)) return @"offline";
+    
+    if (flags & kSCNetworkFlagsInterventionRequired) return @"offline";
+    
+    if (flags & kSCNetworkReachabilityFlagsIsWWAN)
+    {
+        return @"wwan";
+    }
+    else
+    {
+        return @"wifi";
+    }
+}
+
 -(void)sendData
 {
+    [allActions addObject:[NSDictionary dictionaryWithObject:@"TRUE" forKey:@"SEXYTIME"]];
     if ([self.allActions count] == 0 || self.connection != nil) { // No events or already pushing data.
-		return;
+		//return;
 	} else if ([self.allActions count] > 50) {
 		self.actions = [self.allActions subarrayWithRange:NSMakeRange(0, 50)];
 	} else {
 		self.actions = [NSArray arrayWithArray:self.allActions];
 	}
     
-	NSLog(@"%@",[allActions valueForKey:@"dictionaryValue"]);
-	NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:nil error:nil];
+	//NSLog(@"er %@",[allActions valueForKey:@"dictionaryValue"]);
+    
+    NSLog(@"ACt %@", actions);
+    
+    NSDictionary *postData = [[NSDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", nil];
+    
+	NSData *data = [NSJSONSerialization dataWithJSONObject:postData options:0 error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	NSString *postBody = [NSString stringWithFormat:@"%@", data];
+	NSString *postBody = [NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     
     NSLog(@"%@",postBody);
     
-	//NSURL *url = [NSURL URLWithString:[self serverURL]];
-	//NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-	//[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
-	//[request setHTTPMethod:@"POST"];
-	//[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
-	//self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	//[request release];
+//	NSURL *url = [NSURL URLWithString:@""];//vungle endpoint here
+//	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+//	[request setValue:VGContentJSON forHTTPHeaderField:VGContentType];
+//	[request setHTTPMethod:@"POST"];
+//	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
+//	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+//	[request release];
 }
 -(void)readSavedData
 {
@@ -141,10 +217,7 @@ static VGAnalytics *sharedInstance = nil;
 	self.connection = nil;
     [self saveData];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
-		[[UIApplication sharedApplication] endBackgroundTask:taskId];
-        taskId = UIBackgroundTaskInvalid;
-	}
+	[self endBackgroundTask];
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
 {
@@ -161,22 +234,76 @@ static VGAnalytics *sharedInstance = nil;
 	//	NSLog(@"failed %@", response);
 	//}
     
+    //[response release];
 	[self saveData];
 	self.actions = nil;
 	self.responseData = nil;
 	self.connection = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
-		[[UIApplication sharedApplication] endBackgroundTask:taskId];
-        taskId = UIBackgroundTaskInvalid;
+	[self endBackgroundTask];
+}
+
+-(void)endBackgroundTask;
+{
+    if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskIdentCard != UIBackgroundTaskInvalid) {
+		[[UIApplication sharedApplication] endBackgroundTask:taskIdentCard];
+        taskIdentCard = UIBackgroundTaskInvalid;
 	}
 }
 
 -(void)applicationWillTerminate:(NSNotification *)notification
-{}
+{
+    [self saveData];
+}
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification
-{}
+{
+    if (self.appId) {
+		[self readSavedData];
+		[self sendData];
+	}
+    
+    [self endBackgroundTask];
+
+}
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification
-{}
+{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+        [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+        taskIdentCard = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [self.connection cancel];
+            self.connection = nil;
+            [self saveData];
+            [[UIApplication sharedApplication] endBackgroundTask:taskIdentCard];
+            taskIdentCard = UIBackgroundTaskInvalid;
+        }]	;
+        [self sendData];
+    } else {
+        [self saveData];
+    }
+}
+
+- (void) stop {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[timer invalidate];
+    //[timer release];
+    //timer = nil;
+    [self saveData];
+}
+
+- (void)dealloc
+{
+    [self saveData];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [appId release];
+    [actions release];
+    [userProperties release];
+    //[timer invalidate];
+    //[timer release];
+    [allActions release];
+    [responseData release];
+    [connection release];
+    //[userId release];
+    [super dealloc];
+}
 
 @end
