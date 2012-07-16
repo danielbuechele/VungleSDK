@@ -3,10 +3,10 @@
 //  ExampleAdvertiserSDK
 //
 //  Created by Harsh Jariwala on 6/25/12.
-//  Copyright (c) 2012 Carnegie Mellon University. All rights reserved.
 //
 
 #import "VGAnalytics.h"
+#import "sbjson/VGSBJson.h"
 #import "VGDownload.h"
 #include <netinet/in.h>
 #import "SystemConfiguration/SCNetworkReachability.h"
@@ -21,7 +21,6 @@
 @property(nonatomic,retain) NSMutableArray *allActions;
 @property(nonatomic,retain) NSURLConnection *connection;
 @property(nonatomic,retain) NSMutableData *responseData;
-@property(nonatomic,retain) id<VGAnalyticsDelegate> delegate;
 
 -(void)start;
 -(void)endBackgroundTask;
@@ -32,6 +31,7 @@
 -(void)applicationWillTerminate:(NSNotification *)notification;
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
+-(void)setHeadersforRequest:(NSMutableURLRequest*)request;
 @end
 
 static NSString* VGContentJSON = @"application/json";
@@ -116,6 +116,17 @@ static VGAnalytics *sharedInstance = nil;
     [self setUploadInterval:uploadInterval];
 }
 
+-(void)trackAction:(NSString *)act
+{
+    NSMutableDictionary *temp = [[[NSMutableDictionary alloc] init] autorelease];
+    [temp setObject:act forKey:@"action"];
+    NSDate *x = [[NSDate alloc] init];
+    NSTimeInterval y = [x timeIntervalSince1970];
+    [temp setValue:[NSNumber numberWithDouble:y] forKey:@"eventtime"];
+    [x release];
+    [allActions addObject:temp];
+}
+
 -(NSString*)findReachability
 {
     SCNetworkReachabilityFlags flags = 0;
@@ -150,37 +161,55 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)sendData
 {
-    [allActions addObject:[NSDictionary dictionaryWithObject:@"TRUE" forKey:@"SEXYTIME"]];
+    
     if ([self.allActions count] == 0 || self.connection != nil) { // No events or already pushing data.
-		//return;
+		return;
 	} else if ([self.allActions count] > 50) {
 		self.actions = [self.allActions subarrayWithRange:NSMakeRange(0, 50)];
 	} else {
 		self.actions = [NSArray arrayWithArray:self.allActions];
 	}
     
-	//NSLog(@"er %@",[allActions valueForKey:@"dictionaryValue"]);
+    VGJsonWriter *writer = [[VGJsonWriter alloc] init];
     
-    NSLog(@"ACt %@", actions);
+    NSLog(@"ACt %@", actions);//TEST ONLY
     
     NSDictionary *postData = [[NSDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", nil];
     
-	NSData *data = [NSJSONSerialization dataWithJSONObject:postData options:0 error:nil];
+    NSString *data;
+    
+    if(NSClassFromString(@"NSJSONSerialization")) {
+        NSData *tempdata = [NSJSONSerialization dataWithJSONObject:postData options:0 error:nil];
+        data = [[NSString alloc] initWithData:tempdata encoding:NSUTF8StringEncoding];
+        [data autorelease];
+        NSLog(@"hello world");//TEST ONLY
+    }
+    else {
+        data = [writer stringWithObject:postData];
+    }
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	NSString *postBody = [NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+	NSString *postBody = [NSString stringWithFormat:@"%@", data];
     
-    NSLog(@"%@",postBody);
+    NSLog(@"%@",postBody);//TEST ONLY
     
-//	NSURL *url = [NSURL URLWithString:@""];//vungle endpoint here
-//	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-//	[request setValue:VGContentJSON forHTTPHeaderField:VGContentType];
-//	[request setHTTPMethod:@"POST"];
-//	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
-//	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-//	[request release];
+	NSURL *url = [NSURL URLWithString:@"http://localhost:3000/api/v1/analytics"];//vungle endpoint here
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	[request setHTTPMethod:@"POST"];
+	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	[request release];
+    [postData release];
+    [writer release];
 }
+
+-(void)setHeadersforRequest:(NSMutableURLRequest*)request
+{
+    [request setValue:VGContentJSON forHTTPHeaderField:VGContentType];
+}
+
 -(void)readSavedData
 {
+    NSLog(@"reading data %@", self.allActions);
     self.allActions = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
 	if (!self.allActions) {
 		self.allActions = [NSMutableArray array];
@@ -188,6 +217,7 @@ static VGAnalytics *sharedInstance = nil;
 }
 -(void)saveData
 {
+    NSLog(@"saving data %@", self.allActions);
     if (![NSKeyedArchiver archiveRootObject:[self allActions] toFile:[self filePath]]) {
 		NSLog(@"Unable to archive data!!!");
 	}
@@ -225,26 +255,38 @@ static VGAnalytics *sharedInstance = nil;
         [self.delegate VGAnalytics:self didUploadActions:self.actions];
         
     }
-	//NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
-	//NSInteger result = [response intValue];
+	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
+
+    NSLog(@"%@", response);//TEST ONLY
+    
+    VGJsonParser *parser = [[VGJsonParser alloc] init];
+    NSDictionary *dict;
+    
+    if(NSClassFromString(@"NSJSONSerialization")) {
+        dict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+        NSLog(@"hello world");//TEST ONLY
+    }
+    else {
+        dict = [parser objectWithData:responseData];
+    }
+    
+    NSLog(@"DICTIONARY %@", dict);//TEST ONLY
     
     [self.allActions removeObjectsInArray:self.actions];
-	
-    //if (result == 0) {
-	//	NSLog(@"failed %@", response);
-	//}
     
-    //[response release];
 	[self saveData];
 	self.actions = nil;
+    self.connection = nil;
 	self.responseData = nil;
-	self.connection = nil;
+    [response release];
+    [parser release];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[self endBackgroundTask];
 }
 
 -(void)endBackgroundTask;
 {
+    
     if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskIdentCard != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskIdentCard];
         taskIdentCard = UIBackgroundTaskInvalid;
@@ -275,7 +317,7 @@ static VGAnalytics *sharedInstance = nil;
             [self saveData];
             [[UIApplication sharedApplication] endBackgroundTask:taskIdentCard];
             taskIdentCard = UIBackgroundTaskInvalid;
-        }]	;
+        }];
         [self sendData];
     } else {
         [self saveData];

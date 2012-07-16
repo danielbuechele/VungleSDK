@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		439818DF15A36C210094B983 /* NSObject+VGSBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818C615A36C210094B983 /* NSObject+VGSBJson.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E015A36C210094B983 /* VGSBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818C915A36C210094B983 /* VGSBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E115A36C210094B983 /* VGSBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818CB15A36C210094B983 /* VGSBJsonStreamParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E215A36C210094B983 /* VGSBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818CD15A36C210094B983 /* VGSBJsonStreamParserAccumulator.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E315A36C210094B983 /* VGSBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818CF15A36C210094B983 /* VGSBJsonStreamParserAdapter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E415A36C210094B983 /* VGSBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818D115A36C210094B983 /* VGSBJsonStreamParserState.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E515A36C210094B983 /* VGSBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818D315A36C210094B983 /* VGSBJsonStreamWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E615A36C210094B983 /* VGSBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818D515A36C210094B983 /* VGSBJsonStreamWriterAccumulator.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E715A36C210094B983 /* VGSBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818D715A36C210094B983 /* VGSBJsonStreamWriterState.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E815A36C210094B983 /* VGSBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818D915A36C210094B983 /* VGSBJsonTokeniser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818E915A36C210094B983 /* VGSBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818DB15A36C210094B983 /* VGSBJsonUTF8Stream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		439818EA15A36C210094B983 /* VGSBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439818DD15A36C210094B983 /* VGSBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4399C0711598EE5A00287DE2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4399C0701598EE5A00287DE2 /* UIKit.framework */; };
 		4399C0731598EE5A00287DE2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4399C0721598EE5A00287DE2 /* Foundation.framework */; };
 		4399C0751598EE5A00287DE2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4399C0741598EE5A00287DE2 /* CoreGraphics.framework */; };
@@ -21,6 +33,31 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		439818C515A36C210094B983 /* NSObject+VGSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+VGSBJson.h"; sourceTree = "<group>"; };
+		439818C615A36C210094B983 /* NSObject+VGSBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+VGSBJson.m"; sourceTree = "<group>"; };
+		439818C815A36C210094B983 /* VGSBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonParser.h; sourceTree = "<group>"; };
+		439818C915A36C210094B983 /* VGSBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonParser.m; sourceTree = "<group>"; };
+		439818CA15A36C210094B983 /* VGSBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamParser.h; sourceTree = "<group>"; };
+		439818CB15A36C210094B983 /* VGSBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamParser.m; sourceTree = "<group>"; };
+		439818CC15A36C210094B983 /* VGSBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
+		439818CD15A36C210094B983 /* VGSBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
+		439818CE15A36C210094B983 /* VGSBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
+		439818CF15A36C210094B983 /* VGSBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
+		439818D015A36C210094B983 /* VGSBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamParserState.h; sourceTree = "<group>"; };
+		439818D115A36C210094B983 /* VGSBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamParserState.m; sourceTree = "<group>"; };
+		439818D215A36C210094B983 /* VGSBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamWriter.h; sourceTree = "<group>"; };
+		439818D315A36C210094B983 /* VGSBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamWriter.m; sourceTree = "<group>"; };
+		439818D415A36C210094B983 /* VGSBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
+		439818D515A36C210094B983 /* VGSBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
+		439818D615A36C210094B983 /* VGSBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonStreamWriterState.h; sourceTree = "<group>"; };
+		439818D715A36C210094B983 /* VGSBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonStreamWriterState.m; sourceTree = "<group>"; };
+		439818D815A36C210094B983 /* VGSBJsonTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonTokeniser.h; sourceTree = "<group>"; };
+		439818D915A36C210094B983 /* VGSBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonTokeniser.m; sourceTree = "<group>"; };
+		439818DA15A36C210094B983 /* VGSBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonUTF8Stream.h; sourceTree = "<group>"; };
+		439818DB15A36C210094B983 /* VGSBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonUTF8Stream.m; sourceTree = "<group>"; };
+		439818DC15A36C210094B983 /* VGSBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJsonWriter.h; sourceTree = "<group>"; };
+		439818DD15A36C210094B983 /* VGSBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VGSBJsonWriter.m; sourceTree = "<group>"; };
+		439818DE15A36C210094B983 /* VGSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VGSBJson.h; sourceTree = "<group>"; };
 		4399C06C1598EE5A00287DE2 /* ExampleAdvertiserSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleAdvertiserSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4399C0701598EE5A00287DE2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4399C0721598EE5A00287DE2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -57,6 +94,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		439818C315A36C210094B983 /* sbjson */ = {
+			isa = PBXGroup;
+			children = (
+				439818C415A36C210094B983 /* extras */,
+				439818C715A36C210094B983 /* modules */,
+				439818DE15A36C210094B983 /* VGSBJson.h */,
+			);
+			path = sbjson;
+			sourceTree = "<group>";
+		};
+		439818C415A36C210094B983 /* extras */ = {
+			isa = PBXGroup;
+			children = (
+				439818C515A36C210094B983 /* NSObject+VGSBJson.h */,
+				439818C615A36C210094B983 /* NSObject+VGSBJson.m */,
+			);
+			path = extras;
+			sourceTree = "<group>";
+		};
+		439818C715A36C210094B983 /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				439818C815A36C210094B983 /* VGSBJsonParser.h */,
+				439818C915A36C210094B983 /* VGSBJsonParser.m */,
+				439818CA15A36C210094B983 /* VGSBJsonStreamParser.h */,
+				439818CB15A36C210094B983 /* VGSBJsonStreamParser.m */,
+				439818CC15A36C210094B983 /* VGSBJsonStreamParserAccumulator.h */,
+				439818CD15A36C210094B983 /* VGSBJsonStreamParserAccumulator.m */,
+				439818CE15A36C210094B983 /* VGSBJsonStreamParserAdapter.h */,
+				439818CF15A36C210094B983 /* VGSBJsonStreamParserAdapter.m */,
+				439818D015A36C210094B983 /* VGSBJsonStreamParserState.h */,
+				439818D115A36C210094B983 /* VGSBJsonStreamParserState.m */,
+				439818D215A36C210094B983 /* VGSBJsonStreamWriter.h */,
+				439818D315A36C210094B983 /* VGSBJsonStreamWriter.m */,
+				439818D415A36C210094B983 /* VGSBJsonStreamWriterAccumulator.h */,
+				439818D515A36C210094B983 /* VGSBJsonStreamWriterAccumulator.m */,
+				439818D615A36C210094B983 /* VGSBJsonStreamWriterState.h */,
+				439818D715A36C210094B983 /* VGSBJsonStreamWriterState.m */,
+				439818D815A36C210094B983 /* VGSBJsonTokeniser.h */,
+				439818D915A36C210094B983 /* VGSBJsonTokeniser.m */,
+				439818DA15A36C210094B983 /* VGSBJsonUTF8Stream.h */,
+				439818DB15A36C210094B983 /* VGSBJsonUTF8Stream.m */,
+				439818DC15A36C210094B983 /* VGSBJsonWriter.h */,
+				439818DD15A36C210094B983 /* VGSBJsonWriter.m */,
+			);
+			path = modules;
+			sourceTree = "<group>";
+		};
 		4399C0611598EE5A00287DE2 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +198,7 @@
 		4399C08D1598F04600287DE2 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				439818C315A36C210094B983 /* sbjson */,
 				4399C0B01599565300287DE2 /* OpenUDID.h */,
 				4399C08F1598F04600287DE2 /* OpenUDID.m */,
 				4399C0901598F04600287DE2 /* VGDownload.h */,
@@ -191,6 +277,18 @@
 				4399C0921598F04600287DE2 /* OpenUDID.m in Sources */,
 				4399C0931598F04600287DE2 /* VGDownload.m in Sources */,
 				4399C0961598F77500287DE2 /* VGAnalytics.m in Sources */,
+				439818DF15A36C210094B983 /* NSObject+VGSBJson.m in Sources */,
+				439818E015A36C210094B983 /* VGSBJsonParser.m in Sources */,
+				439818E115A36C210094B983 /* VGSBJsonStreamParser.m in Sources */,
+				439818E215A36C210094B983 /* VGSBJsonStreamParserAccumulator.m in Sources */,
+				439818E315A36C210094B983 /* VGSBJsonStreamParserAdapter.m in Sources */,
+				439818E415A36C210094B983 /* VGSBJsonStreamParserState.m in Sources */,
+				439818E515A36C210094B983 /* VGSBJsonStreamWriter.m in Sources */,
+				439818E615A36C210094B983 /* VGSBJsonStreamWriterAccumulator.m in Sources */,
+				439818E715A36C210094B983 /* VGSBJsonStreamWriterState.m in Sources */,
+				439818E815A36C210094B983 /* VGSBJsonTokeniser.m in Sources */,
+				439818E915A36C210094B983 /* VGSBJsonUTF8Stream.m in Sources */,
+				439818EA15A36C210094B983 /* VGSBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,7 +326,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				HEADER_SEARCH_PATHS = sbjson;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -246,7 +345,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				HEADER_SEARCH_PATHS = sbjson;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -259,6 +359,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExampleAdvertiserSDK/ExampleAdvertiserSDK-Prefix.pch";
 				INFOPLIST_FILE = "ExampleAdvertiserSDK/ExampleAdvertiserSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -270,6 +371,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ExampleAdvertiserSDK/ExampleAdvertiserSDK-Prefix.pch";
 				INFOPLIST_FILE = "ExampleAdvertiserSDK/ExampleAdvertiserSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -3,11 +3,11 @@
 //  ExampleAdvertiserSDK
 //
 //  Created by Harsh Jariwala on 6/25/12.
-//  Copyright (c) 2012 Carnegie Mellon University. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "VGAnalytics.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <VGAnalyticsDelegate>
 
 @end
