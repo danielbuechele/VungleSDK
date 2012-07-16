@@ -10,4 +10,6 @@
 
 @interface ViewController : UIViewController <VGAnalyticsDelegate>
 
+-(void)buttonPressed;
+
 @end

@@ -67,7 +67,7 @@ static VGAnalytics *sharedInstance = nil;
         actions = [[NSMutableArray alloc] init];
         //userProperties = [[NSMutableDictionary alloc] init];
         sendOnBackground = YES;
-        analyticsURL = @"http://localhost:3000/api/v1/analytics";
+        analyticsURL = @"http://api.vungle.com/api/v1/analytics";
         uploadInterval = kVGInterval;
         //[self.userProperties setObject:@"iOS" forKey:@"platform"];
     }
@@ -253,20 +253,30 @@ static VGAnalytics *sharedInstance = nil;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
 {
+    if(self.responseData == nil)
+    {
+        self.actions = nil;
+        self.connection = nil;
+        [self saveData];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        [self endBackgroundTask];
+        return;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(VGAnalytics:didUploadActions:)]) {
         [self.delegate VGAnalytics:self didUploadActions:self.actions];
         
     }
+    
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 
-    NSLog(@"%@", response);//TEST ONLY
+    NSLog(@"response %@", response);//TEST ONLY
     
     VGJsonParser *parser = [[VGJsonParser alloc] init];
-    NSDictionary *dict;
+    NSDictionary *dict = nil;
     
     if(NSClassFromString(@"NSJSONSerialization")) {
-        dict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
-        NSLog(@"hello world");//TEST ONLY
+        dict = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
     }
     else {
         dict = [parser objectWithData:responseData];

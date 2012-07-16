@@ -24,7 +24,22 @@ static  VGAnalytics *ana;
     
     ana.delegate = self;
     
+    [self.view setBackgroundColor:[UIColor grayColor]];
+    
+    UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [butt setFrame:CGRectMake(100, 100, 100, 50)];
+    [butt setTitle:@"Add Action" forState:UIControlStateNormal];
+    [butt addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:butt];
+    
 	// Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)buttonPressed
+{
+    NSLog(@"PRESSED");
+    [ana trackAction:@"Button Pressed"];
 }
 
 - (void)viewDidUnload
