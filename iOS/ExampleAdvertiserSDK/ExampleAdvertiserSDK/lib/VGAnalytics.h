@@ -31,11 +31,12 @@ static const NSUInteger kVGInterval = 30;
     NSMutableArray *allActions;
     NSArray *actions;
     NSString* analyticsURL;
-    NSMutableDictionary *userProperties;
+//    NSMutableDictionary *userProperties;
     BOOL sendOnBackground;
     id<VGAnalyticsDelegate> delegate;
     NSUInteger uploadInterval;
     UIBackgroundTaskIdentifier taskIdentCard;
+    NSTimer *timer;
 }
 
 @property(nonatomic,retain) id<VGAnalyticsDelegate> delegate;
@@ -44,9 +45,9 @@ static const NSUInteger kVGInterval = 30;
 
 -(id)initWithAppId:(NSString *)AppId;
 
--(void)sendData;
 -(void)trackAction:(NSString *)act;
 
+-(void)setUploadInterval:(NSUInteger)newInterval;
 -(NSString*)findReachability;
 -(NSString*)getVersion;
 -(NSString*)getiOSVersion;
