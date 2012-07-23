@@ -16,7 +16,7 @@
 @property(nonatomic,retain) NSString* analyticsURL;
 @property(nonatomic,assign) BOOL sendOnBackground;
 @property(nonatomic,assign) NSUInteger uploadInterval;
-//@property(nonatomic,retain) NSMutableDictionary *userProperties;
+@property(nonatomic,retain) NSMutableDictionary *userProperties;
 @property(nonatomic,retain) NSArray *actions;
 @property(nonatomic,retain) NSMutableArray *allActions;
 @property(nonatomic,retain) NSURLConnection *connection;
@@ -38,7 +38,7 @@ static NSString* VGContentJSON = @"application/json";
 static NSString* VGContentType = @"Content-Type";
 
 @implementation VGAnalytics
-@synthesize appId, sendOnBackground, connection, delegate; //userProperties has been removed since we dont need it
+@synthesize appId, sendOnBackground, connection, delegate, userProperties;
 @synthesize analyticsURL, responseData, uploadInterval, actions, allActions;
 
 static VGAnalytics *sharedInstance = nil;
@@ -65,11 +65,11 @@ static VGAnalytics *sharedInstance = nil;
 {
    if ((self = [super init])) {
         actions = [[NSMutableArray alloc] init];
-        //userProperties = [[NSMutableDictionary alloc] init];
+        userProperties = [[NSMutableDictionary alloc] init];
         sendOnBackground = YES;
-        analyticsURL = @"http://api.vungle.com/api/v1/analytics";
+        analyticsURL = @"http://acceptance.vungle.com/api/v1/analytics";
         uploadInterval = kVGInterval;
-        //[self.userProperties setObject:@"iOS" forKey:@"platform"];
+        [self.userProperties setObject:@"iOS" forKey:@"platform"];
     }
     
     return self;
@@ -127,6 +127,11 @@ static VGAnalytics *sharedInstance = nil;
     [allActions addObject:temp];
 }
 
+-(void)addUserPropertyWithValue:(NSString*)value forKey:(NSString*)key
+{
+    [userProperties setValue:value forKey:key];
+}
+
 -(NSString*)findReachability
 {
     SCNetworkReachabilityFlags flags = 0;
@@ -162,7 +167,7 @@ static VGAnalytics *sharedInstance = nil;
 -(void)sendData
 {
     if ([self.allActions count] == 0 || self.connection != nil) { // No events or already pushing data.
-		return;
+        return;        
 	} else if ([self.allActions count] > 50) {
 		self.actions = [self.allActions subarrayWithRange:NSMakeRange(0, 50)];
 	} else {
@@ -171,9 +176,10 @@ static VGAnalytics *sharedInstance = nil;
     
     VGJsonWriter *writer = [[VGJsonWriter alloc] init];
     
-    NSLog(@"ACt %@", actions);//TEST ONLY
+    //NSLog(@"ACt %@", actions);//TEST ONLY
     
-    NSDictionary *postData = [[NSDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", nil];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", nil];
+    [postData addEntriesFromDictionary:userProperties];
     
     NSString *data;
     
@@ -181,7 +187,6 @@ static VGAnalytics *sharedInstance = nil;
         NSData *tempdata = [NSJSONSerialization dataWithJSONObject:postData options:0 error:nil];
         data = [[NSString alloc] initWithData:tempdata encoding:NSUTF8StringEncoding];
         [data autorelease];
-        NSLog(@"hello world");//TEST ONLY
     }
     else {
         data = [writer stringWithObject:postData];
@@ -189,7 +194,7 @@ static VGAnalytics *sharedInstance = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *postBody = [NSString stringWithFormat:@"%@", data];
     
-    NSLog(@"%@",postBody);//TEST ONLY
+    //NSLog(@"%@",postBody);//TEST ONLY
     
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
@@ -208,7 +213,6 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)readSavedData
 {
-    NSLog(@"reading data %@", self.allActions);
     self.allActions = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
 	if (!self.allActions) {
 		self.allActions = [NSMutableArray array];
@@ -216,7 +220,6 @@ static VGAnalytics *sharedInstance = nil;
 }
 -(void)saveData
 {
-    NSLog(@"saving data %@", self.allActions);
     if (![NSKeyedArchiver archiveRootObject:[self allActions] toFile:[self filePath]]) {
 		NSLog(@"Unable to archive data!!!");
 	}
@@ -239,7 +242,6 @@ static VGAnalytics *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
 {
-	NSLog(@"error, clean up %@", error);
     if ([self.delegate respondsToSelector:@selector(VGAnalytics:didFailToUploadActions:withError:)]) {
         [self.delegate VGAnalytics:self didFailToUploadActions:self.actions withError:error];
     }
@@ -270,19 +272,19 @@ static VGAnalytics *sharedInstance = nil;
     
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 
-    NSLog(@"response %@", response);//TEST ONLY
+    //NSLog(@"response %@", response);//TEST ONLY
     
     VGJsonParser *parser = [[VGJsonParser alloc] init];
     NSDictionary *dict = nil;
     
-    if(NSClassFromString(@"NSJSONSerialization")) {
+    if(NSClassFromString(@"NSJSONSerialization")&&self.responseData!=nil) {
         dict = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
     }
     else {
         dict = [parser objectWithData:responseData];
     }
     
-    NSLog(@"DICTIONARY %@", dict);//TEST ONLY
+    //NSLog(@"DICTIONARY %@", dict);//TEST ONLY
     
     [self.allActions removeObjectsInArray:self.actions];
     
@@ -298,7 +300,6 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)endBackgroundTask;
 {
-    
     if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskIdentCard != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskIdentCard];
         taskIdentCard = UIBackgroundTaskInvalid;
@@ -317,7 +318,6 @@ static VGAnalytics *sharedInstance = nil;
 	}
     
     [self endBackgroundTask];
-
 }
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
@@ -339,7 +339,7 @@ static VGAnalytics *sharedInstance = nil;
 //timer code
 - (void) setUploadInterval:(NSUInteger) newInterval {
     uploadInterval = newInterval;
-    
+        
     if (timer) {
         [timer invalidate];
         [timer release];
@@ -370,7 +370,7 @@ static VGAnalytics *sharedInstance = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [appId release];
     [actions release];
-    //[userProperties release];
+    [userProperties release];
     [timer invalidate];
     [timer release];
     [allActions release];

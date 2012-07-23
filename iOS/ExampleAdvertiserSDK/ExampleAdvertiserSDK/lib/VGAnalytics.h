@@ -31,7 +31,7 @@ static const NSUInteger kVGInterval = 30;
     NSMutableArray *allActions;
     NSArray *actions;
     NSString* analyticsURL;
-//    NSMutableDictionary *userProperties;
+    NSMutableDictionary *userProperties;
     BOOL sendOnBackground;
     id<VGAnalyticsDelegate> delegate;
     NSUInteger uploadInterval;
@@ -47,6 +47,7 @@ static const NSUInteger kVGInterval = 30;
 
 -(void)trackAction:(NSString *)act;
 
+-(void)addUserPropertyWithValue:(NSString*)value forKey:(NSString*)key;
 -(void)setUploadInterval:(NSUInteger)newInterval;
 -(NSString*)findReachability;
 -(NSString*)getVersion;

@@ -23,7 +23,6 @@ static  VGAnalytics *ana;
     ana = [[VGAnalytics alloc] initWithAppId:@"HelloWorld!"];
     
     ana.delegate = self;
-    
     [self.view setBackgroundColor:[UIColor grayColor]];
     
     UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
