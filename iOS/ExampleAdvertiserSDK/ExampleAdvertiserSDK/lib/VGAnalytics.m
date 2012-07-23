@@ -26,22 +26,35 @@
 -(void)endBackgroundTask;
 -(void)sendData;
 -(NSString*)filePath;
+-(NSTimeInterval)VGCurrentTime;
 -(void)readSavedData;
 -(void)saveData;
 -(void)applicationWillTerminate:(NSNotification *)notification;
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
 -(void)setHeadersforRequest:(NSMutableURLRequest*)request;
+-(void)trackSession;
 @end
 
 static NSString* VGContentJSON = @"application/json";
 static NSString* VGContentType = @"Content-Type";
+static NSTimeInterval startin  = 0;
 
 @implementation VGAnalytics
 @synthesize appId, sendOnBackground, connection, delegate, userProperties;
 @synthesize analyticsURL, responseData, uploadInterval, actions, allActions;
 
 static VGAnalytics *sharedInstance = nil;
+
+-(NSTimeInterval)VGCurrentTime
+{
+    NSDate*               date = [[NSDate alloc] init];
+    const NSTimeInterval  tval = [date timeIntervalSince1970];
+    
+    [date release];
+    date = nil;
+    return tval;
+}
 
 -(NSString*)getVersion
 {
@@ -86,6 +99,7 @@ static VGAnalytics *sharedInstance = nil;
 }
 
 - (void) start {
+    startin = [self VGCurrentTime]; 
     sharedInstance = self;
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 		
@@ -124,6 +138,16 @@ static VGAnalytics *sharedInstance = nil;
     NSTimeInterval y = [x timeIntervalSince1970];
     [temp setValue:[NSNumber numberWithDouble:y] forKey:@"eventtime"];
     [x release];
+    [allActions addObject:temp];
+}
+
+-(void)trackSession
+{
+    NSString *sess = [NSString stringWithString:@"Session Report"];
+    NSMutableDictionary *temp = [[[NSMutableDictionary alloc] init] autorelease];
+    [temp setObject:sess forKey:@"action"];
+    [temp setValue:[NSNumber numberWithDouble:startin] forKey:@"starttime"];
+    [temp setValue:[NSNumber numberWithDouble:[self VGCurrentTime]] forKey:@"endtime"];
     [allActions addObject:temp];
 }
 
@@ -308,6 +332,7 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)applicationWillTerminate:(NSNotification *)notification
 {
+    [self trackSession];
     [self saveData];
 }
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification
@@ -316,11 +341,12 @@ static VGAnalytics *sharedInstance = nil;
 		[self readSavedData];
 		[self sendData];
 	}
-    
+    startin = [self VGCurrentTime];
     [self endBackgroundTask];
 }
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
+    [self trackSession];
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
         [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
         taskIdentCard = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
