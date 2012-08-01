@@ -20,6 +20,7 @@
 @interface VGAnalytics ()
 @property(nonatomic,retain) NSString *appId;
 @property(nonatomic,retain) NSString* analyticsURL;
+@property(nonatomic,retain) NSString* macAddress;
 @property(nonatomic,assign) BOOL sendOnBackground;
 @property(nonatomic,assign) NSUInteger uploadInterval;
 @property(nonatomic,retain) NSMutableDictionary *userProperties;
@@ -65,7 +66,7 @@ static VGAnalytics *sharedInstance = nil;
 
 -(NSString*)getVersion
 {
-    return @"0.1";
+    return @"0.9";
 }
 
 -(NSString*)getiOSVersion
@@ -137,7 +138,7 @@ static VGAnalytics *sharedInstance = nil;
     // Error...
     NSLog(@"Error: %@", errorFlag);
     
-    return errorFlag;
+    return nil;
 }
 
 - (id)init
@@ -256,6 +257,11 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)sendData
 {
+    if(self.macAddress == nil)
+    {
+        self.macAddress = [self VGMACAddress];
+        NSLog(@"mac %@ ", self.macAddress);
+    }
     if ([self.allActions count] == 0 || self.connection != nil) { // No events or already pushing data.
         return;        
 	} else if ([self.allActions count] > 50) {
@@ -265,10 +271,8 @@ static VGAnalytics *sharedInstance = nil;
 	}
     
     VGJsonWriter *writer = [[VGJsonWriter alloc] init];
-    
-    //NSLog(@"ACt %@", actions);//TEST ONLY
-    
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", [self VGMACAddress], @"mac", nil];
+        
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", nil];
     [postData addEntriesFromDictionary:userProperties];
     
     NSString *data;
@@ -283,9 +287,7 @@ static VGAnalytics *sharedInstance = nil;
     }
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *postBody = [NSString stringWithFormat:@"%@", data];
-    
-    //NSLog(@"%@",postBody);//TEST ONLY
-    
+            
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
@@ -362,8 +364,6 @@ static VGAnalytics *sharedInstance = nil;
     
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 
-    //NSLog(@"response %@", response);//TEST ONLY
-    
     VGJsonParser *parser = [[VGJsonParser alloc] init];
     NSDictionary *dict = nil;
     
@@ -373,8 +373,6 @@ static VGAnalytics *sharedInstance = nil;
     else {
         dict = [parser objectWithData:responseData];
     }
-    
-    //NSLog(@"DICTIONARY %@", dict);//TEST ONLY
     
     [self.allActions removeObjectsInArray:self.actions];
     
