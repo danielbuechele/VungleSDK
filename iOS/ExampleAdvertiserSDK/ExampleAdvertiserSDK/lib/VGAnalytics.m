@@ -16,14 +16,16 @@
 #include <net/if.h>
 #include <net/if_dl.h>
 
+#import <CommonCrypto/CommonHMAC.h>
+
 
 @interface VGAnalytics ()
 @property(nonatomic,retain) NSString *appId;
+@property(nonatomic,retain) NSString *secretKey;
 @property(nonatomic,retain) NSString* analyticsURL;
 @property(nonatomic,retain) NSString* macAddress;
 @property(nonatomic,assign) BOOL sendOnBackground;
 @property(nonatomic,assign) NSUInteger uploadInterval;
-@property(nonatomic,retain) NSMutableDictionary *userProperties;
 @property(nonatomic,retain) NSArray *actions;
 @property(nonatomic,retain) NSMutableArray *allActions;
 @property(nonatomic,retain) NSURLConnection *connection;
@@ -48,8 +50,26 @@ static NSString* VGContentJSON = @"application/json";
 static NSString* VGContentType = @"Content-Type";
 static NSTimeInterval startin  = 0;
 
+static NSString* VGcalculateHMAC_SHA256(NSString *str, NSString *key) {
+	const char *cStr = [str UTF8String];
+	const char *cSecretStr = [key UTF8String];
+    unsigned char digest[CC_SHA256_DIGEST_LENGTH];
+	CCHmac(kCCHmacAlgSHA256, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
+	return [NSString stringWithFormat:
+			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+			digest[0],  digest[1],  digest[2],  digest[3],
+			digest[4],  digest[5],  digest[6],  digest[7],
+			digest[8],  digest[9],  digest[10], digest[11],
+			digest[12], digest[13], digest[14], digest[15],
+			digest[16], digest[17], digest[18], digest[19],
+            digest[20], digest[21], digest[22], digest[23],
+            digest[24], digest[25], digest[26], digest[27],
+            digest[28], digest[29], digest[30], digest[31]
+			];
+}
+
 @implementation VGAnalytics
-@synthesize appId, sendOnBackground, connection, delegate, userProperties;
+@synthesize appId, sendOnBackground, connection, delegate;
 @synthesize analyticsURL, responseData, uploadInterval, actions, allActions;
 
 static VGAnalytics *sharedInstance = nil;
@@ -74,10 +94,15 @@ static VGAnalytics *sharedInstance = nil;
     return [[UIDevice currentDevice] systemVersion];
 }
 
-- (id)initWithAppId:(NSString *)AppId
+- (id)initWithAppId:(NSString *)AppId andSecretKey:(NSString *)secret
 {
+    if (AppId == nil || secret == nil)
+    {
+        return nil;
+    }
     if ((self = [self init])) {
         self.appId = AppId;
+        self.secretKey = secret;
         [self start];
     }
     return  self;
@@ -143,13 +168,12 @@ static VGAnalytics *sharedInstance = nil;
 
 - (id)init
 {
-   if ((self = [super init])) {
-        actions = [[NSMutableArray alloc] init];
-        userProperties = [[NSMutableDictionary alloc] init];
-        sendOnBackground = YES;
-        analyticsURL = @"http://acceptance.vungle.com/api/v1/analytics";
-        uploadInterval = kVGInterval;
-        [self.userProperties setObject:@"iOS" forKey:@"platform"];
+    if ((self = [super init])) {
+       actions = [[NSMutableArray alloc] init];
+       sendOnBackground = YES;
+       analyticsURL = @"http://acceptance.vungle.com/api/v1/analytics";
+       uploadInterval = kVGInterval;
+       userName = nil;
     }
     
     return self;
@@ -218,9 +242,9 @@ static VGAnalytics *sharedInstance = nil;
     [allActions addObject:temp];
 }
 
--(void)addUserPropertyWithValue:(NSString*)value forKey:(NSString*)key
+-(void)setUsername:(NSString *)user
 {
-    [userProperties setValue:value forKey:key];
+    userName = user;
 }
 
 -(NSString*)findReachability
@@ -271,9 +295,14 @@ static VGAnalytics *sharedInstance = nil;
 	}
     
     VGJsonWriter *writer = [[VGJsonWriter alloc] init];
-        
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"pubAppId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", nil];
-    [postData addEntriesFromDictionary:userProperties];
+    NSString *sendTime = [[NSNumber numberWithDouble:[self VGCurrentTime]] stringValue];
+    NSString *authorization = VGcalculateHMAC_SHA256(self.secretKey, sendTime);
+    
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"appId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", sendTime, @"sendTime", authorization, @"authorization", nil];
+    if(userName != nil)
+    {
+        [postData setObject:userName forKey:@"username"];
+    }
     
     NSString *data;
     
@@ -287,7 +316,7 @@ static VGAnalytics *sharedInstance = nil;
     }
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *postBody = [NSString stringWithFormat:@"%@", data];
-            
+        
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
@@ -460,7 +489,9 @@ static VGAnalytics *sharedInstance = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [appId release];
     [actions release];
-    [userProperties release];
+    if(userName!=nil) {
+        [userName release];
+    }
     [timer invalidate];
     [timer release];
     [allActions release];

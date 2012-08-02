@@ -28,10 +28,11 @@ static const NSUInteger kVGInterval = 30;
 
 @interface VGAnalytics : NSObject {
     NSString *appId;
+    NSString *secretKey;
     NSMutableArray *allActions;
     NSArray *actions;
-    NSString* analyticsURL;
-    NSMutableDictionary *userProperties;
+    NSString *analyticsURL;
+    NSString *userName;
     BOOL sendOnBackground;
     id<VGAnalyticsDelegate> delegate;
     NSUInteger uploadInterval;
@@ -43,11 +44,11 @@ static const NSUInteger kVGInterval = 30;
 
 +(id)sharedTool;
 
--(id)initWithAppId:(NSString *)AppId;
+-(id)initWithAppId:(NSString*)AppId andSecretKey:(NSString*)secret;
 
--(void)trackAction:(NSString *)act;
+-(void)trackAction:(NSString*)act;
 
--(void)addUserPropertyWithValue:(NSString*)value forKey:(NSString*)key;
+-(void)setUsername:(NSString*)user;
 -(void)setUploadInterval:(NSUInteger)newInterval;
 -(NSString*)findReachability;
 -(NSString*)getVersion;

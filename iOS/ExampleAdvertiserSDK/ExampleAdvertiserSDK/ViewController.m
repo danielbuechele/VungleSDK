@@ -20,11 +20,12 @@ static  VGAnalytics *ana;
 {
     [super viewDidLoad];
     
-    ana = [[VGAnalytics alloc] initWithAppId:@"HelloWorld!"];
+    ana = [[VGAnalytics alloc] initWithAppId:@"SUP" andSecretKey:@"SUP2"];
+    [ana setUsername:@"SEXY"];
     
     ana.delegate = self;
     [self.view setBackgroundColor:[UIColor grayColor]];
-    
+        
     UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [butt setFrame:CGRectMake(100, 100, 100, 50)];
     [butt setTitle:@"Add Action" forState:UIControlStateNormal];
