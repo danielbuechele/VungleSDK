@@ -21,7 +21,7 @@ static  VGAnalytics *ana;
     [super viewDidLoad];
     
     ana = [[VGAnalytics alloc] initWithAppId:@"SUP" andSecretKey:@"SUP2"];
-    [ana setUsername:@"SEXY"];
+    [ana setUsername:@"HELLOWORLD"];
     
     ana.delegate = self;
     [self.view setBackgroundColor:[UIColor grayColor]];
@@ -50,7 +50,7 @@ static  VGAnalytics *ana;
 
 -(void)VGAnalytics:(VGAnalytics *)tool didUploadActions:(NSArray *)Actions
 {
-    NSLog(@"here");
+    NSLog(@"HERE");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
