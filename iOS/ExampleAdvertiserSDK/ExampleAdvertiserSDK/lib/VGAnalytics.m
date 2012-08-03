@@ -234,7 +234,7 @@ static VGAnalytics *sharedInstance = nil;
 
 -(void)trackSession
 {
-    NSString *sess = @"Session Report";
+    NSString *sess = @"VGSession";
     NSMutableDictionary *temp = [[[NSMutableDictionary alloc] init] autorelease];
     [temp setObject:sess forKey:@"action"];
     [temp setValue:[NSNumber numberWithDouble:startin] forKey:@"starttime"];
