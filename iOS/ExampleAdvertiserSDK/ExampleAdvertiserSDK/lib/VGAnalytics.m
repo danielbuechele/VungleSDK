@@ -284,7 +284,6 @@ static VGAnalytics *sharedInstance = nil;
     if(self.macAddress == nil)
     {
         self.macAddress = [self VGMACAddress];
-        NSLog(@"mac %@ ", self.macAddress);
     }
     if ([self.allActions count] == 0 || self.connection != nil) { // No events or already pushing data.
         return;        
@@ -295,10 +294,12 @@ static VGAnalytics *sharedInstance = nil;
 	}
     
     VGJsonWriter *writer = [[VGJsonWriter alloc] init];
-    NSString *sendTime = [[NSNumber numberWithDouble:[self VGCurrentTime]] stringValue];
+    NSTimeInterval x = [self VGCurrentTime];
+    NSString *sendTime = [[NSNumber numberWithLong:x] stringValue];
     NSString *authorization = VGcalculateHMAC_SHA256(self.secretKey, sendTime);
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"appId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", sendTime, @"sendTime", authorization, @"authorization", nil];
+    
     if(userName != nil)
     {
         [postData setObject:userName forKey:@"username"];
