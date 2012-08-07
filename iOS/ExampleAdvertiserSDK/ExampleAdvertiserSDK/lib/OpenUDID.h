@@ -2,36 +2,47 @@
 //  OpenUDID.h
 //  openudid
 //
-//  initiated by Yann Lechelle (cofounder Appsfire) on 8/28/11.
+//  initiated by Yann Lechelle (cofounder @Appsfire) on 8/28/11.
 //  Copyright 2011 OpenUDID.org
 //
-//  iOS / MacOS code: https://github.com/ylechelle/OpenUDID
-//  Android code: https://github.com/vieux/OpenUDID
+//  Main branches
+//      iOS code: https://github.com/ylechelle/OpenUDID
 //
-//  Contributors:
-//      https://github.com/ylechelle (initiator & iOS code)
-//      https://github.com/samrobbins (Mac OS port)
-//      https://github.com/vieux (Android version)
 
 /*
- Permission is hereby granted, free of charge, to any person obtaining a copy of
- this software and associated documentation files (the "Software"), to deal in
- the Software without restriction, including without limitation the rights to
- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- of the Software, and to permit persons to whom the Software is furnished to do
- so, subject to the following conditions:
+ !!! IMPORTANT !!!
  
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
+ IF YOU ARE GOING TO INTEGRATE OpenUDID INSIDE A (STATIC) LIBRARY,
+ PLEASE MAKE SURE YOU REFACTOR THE OpenUDID CLASS WITH A PREFIX OF YOUR OWN,
+ E.G. ACME_OpenUDID. THIS WILL AVOID CONFUSION BY DEVELOPERS WHO ARE ALSO
+ USING OpenUDID IN THEIR OWN CODE.
  
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-*/
+ !!! IMPORTANT !!!
+ 
+ */
+
+/*
+ http://en.wikipedia.org/wiki/Zlib_License
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgment in the product documentation would be
+ appreciated but is not required.
+ 
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 
+ 3. This notice may not be removed or altered from any source
+ distribution.
+ */
 
 #import <Foundation/Foundation.h>
 
@@ -45,9 +56,10 @@
 #define kOpenUDIDErrorOptedOut      1
 #define kOpenUDIDErrorCompromised   2
 
-@interface OpenUDID : NSObject {
+@interface VGOpenUDID : NSObject {
 }
 + (NSString*) value;
 + (NSString*) valueWithError:(NSError**)error;
++ (void) setOptOut:(BOOL)optOutValue;
 
 @end

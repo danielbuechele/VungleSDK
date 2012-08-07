@@ -126,7 +126,7 @@ static BOOL runRequest(NSString* URL)
 
 static NSString* systemIdentifier(void)
 {
-    NSString* openUDID = [OpenUDID value];
+    NSString* openUDID = [VGOpenUDID value];
 	return openUDID;
 }
 

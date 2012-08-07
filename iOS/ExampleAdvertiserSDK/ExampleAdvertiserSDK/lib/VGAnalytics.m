@@ -321,7 +321,9 @@ static VGAnalytics *sharedInstance = nil;
     }
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *postBody = [NSString stringWithFormat:@"%@", data];
-
+    
+    NSLog(@"JSON %@", postBody);
+    
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
