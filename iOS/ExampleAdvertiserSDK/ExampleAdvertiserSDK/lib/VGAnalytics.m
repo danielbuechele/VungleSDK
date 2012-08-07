@@ -300,6 +300,10 @@ static VGAnalytics *sharedInstance = nil;
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"appId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", sendTime, @"sendTime", authorization, @"authorization", nil];
     
+    if([[UIDevice currentDevice] respondsToSelector:@selector(identifierForAdvertising)]) {
+        [postData setObject:[[[UIDevice currentDevice] identifierForAdvertising] UUIDString] forKey:@"aplAdId"];
+    }
+    
     if(userName != nil)
     {
         [postData setObject:userName forKey:@"username"];
@@ -317,7 +321,7 @@ static VGAnalytics *sharedInstance = nil;
     }
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *postBody = [NSString stringWithFormat:@"%@", data];
-        
+
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
