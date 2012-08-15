@@ -9,6 +9,8 @@
 
 #import "ViewController.h"
 
+#import "VGDownload.h"
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -22,6 +24,7 @@
     [self.viewController.view setBackgroundColor:[UIColor grayColor]];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    VGReportDownload(@"vungleTest");
     return YES;
 }
 

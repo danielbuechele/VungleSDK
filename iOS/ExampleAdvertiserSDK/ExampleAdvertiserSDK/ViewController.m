@@ -20,8 +20,8 @@ static  VGAnalytics *ana;
 {
     [super viewDidLoad];
     
-    ana = [[VGAnalytics alloc] initWithAppId:@"SUP" andSecretKey:@"SUP2"];
-    [ana setUsername:@"HELLOWORLD"];
+    ana = [[VGAnalytics alloc] initWithAppId:@"vungleTest" andSecretKey:@"replace with secret key"];
+    [ana setUsername:@"set username of the user (if available)"];
     
     ana.delegate = self;
     [self.view setBackgroundColor:[UIColor grayColor]];
