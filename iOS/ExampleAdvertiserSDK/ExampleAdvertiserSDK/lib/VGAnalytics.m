@@ -56,7 +56,7 @@ static NSString* VGcalculateHMAC_SHA256(NSString *str, NSString *key) {
     unsigned char digest[CC_SHA256_DIGEST_LENGTH];
 	CCHmac(kCCHmacAlgSHA256, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
 	return [NSString stringWithFormat:
-			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+			@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
 			digest[0],  digest[1],  digest[2],  digest[3],
 			digest[4],  digest[5],  digest[6],  digest[7],
 			digest[8],  digest[9],  digest[10], digest[11],
@@ -296,7 +296,7 @@ static VGAnalytics *sharedInstance = nil;
     VGJsonWriter *writer = [[VGJsonWriter alloc] init];
     NSTimeInterval x = [self VGCurrentTime];
     NSString *sendTime = [[NSNumber numberWithLong:x] stringValue];
-    NSString *authorization = VGcalculateHMAC_SHA256(self.secretKey, sendTime);
+    NSString *authorization = VGcalculateHMAC_SHA256(sendTime, self.secretKey);
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[self findReachability],@"connection",[VGDownload getOpenUDID],@"isu",self.appId,@"appId",actions,@"actions", self.macAddress , @"mac", [self getiOSVersion], @"iOSVersion", [self getVersion], @"x-vungle-version", sendTime, @"sendTime", authorization, @"authorization", nil];
     
