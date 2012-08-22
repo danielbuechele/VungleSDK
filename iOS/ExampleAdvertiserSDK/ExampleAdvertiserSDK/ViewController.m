@@ -28,7 +28,7 @@ static  VGAnalytics *ana;
         
     UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [butt setFrame:CGRectMake(100, 100, 100, 50)];
-    [butt setTitle:@"Add Action" forState:UIControlStateNormal];
+    [butt setTitle:@"Send event" forState:UIControlStateNormal];
     [butt addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:butt];
@@ -38,7 +38,7 @@ static  VGAnalytics *ana;
 
 - (void)buttonPressed
 {
-    NSLog(@"PRESSED");
+    NSLog(@"Posting event...");
     [ana trackAction:@"Button Pressed"];
 }
 
@@ -50,7 +50,7 @@ static  VGAnalytics *ana;
 
 -(void)VGAnalytics:(VGAnalytics *)tool didUploadActions:(NSArray *)Actions
 {
-    NSLog(@"HERE");
+    NSLog(@"Done sending events");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
