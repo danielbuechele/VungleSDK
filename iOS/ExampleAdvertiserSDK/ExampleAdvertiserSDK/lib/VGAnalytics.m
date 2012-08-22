@@ -171,7 +171,7 @@ static VGAnalytics *sharedInstance = nil;
     if ((self = [super init])) {
        actions = [[NSMutableArray alloc] init];
        sendOnBackground = YES;
-       analyticsURL = @"http://acceptance.vungle.com/api/v1/analytics";
+       analyticsURL = @"http://localhost:3000/api/v1/event";
        uploadInterval = kVGInterval;
        userName = nil;
     }
@@ -327,7 +327,14 @@ static VGAnalytics *sharedInstance = nil;
 	NSURL *url = [NSURL URLWithString:analyticsURL];//vungle endpoint here
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
-	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    NSData *requestData = [NSData dataWithBytes:[postBody UTF8String]
+                                         length:[postBody length]];
+
+    [request setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
+
+	[request setHTTPBody: requestData];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	[request release];
     [postData release];
