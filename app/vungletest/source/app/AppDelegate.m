@@ -7,6 +7,12 @@
 #import "Prefs.h"
 #import "VGDownload.h"
 
+#define TEST_VGBYTES_ASSET_LOADER 0
+
+#if TEST_VGBYTES_ASSET_LOADER
+#import "VGBytesAssetLoader.h"
+#endif
+
 static NSString* bundleStringForKey(NSString* key)
 {
     NSBundle*      bndl = [NSBundle mainBundle];
@@ -219,6 +225,13 @@ int main(int argc, char** argv)
     
     // start vungle publisher library
     [VGVunglePub startWithPubAppID:[Prefs pubAppIDGet] userData:data];
+	
+	// test the asset loader
+#if TEST_VGBYTES_ASSET_LOADER
+	VGBytesAssetLoader* loader = [[VGBytesAssetLoader alloc] init];
+	[VGVunglePub setAssetLoader:loader];
+	[loader release];
+#endif
 }
 
 -(void)vungleStop

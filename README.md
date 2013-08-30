@@ -1,8 +1,3 @@
-# Vungle Advertiser SDK
+# Vungle iOS Publisher SDK
 
-Please see the individual platform directories for integration instructions.
-
-## Collaborators
-
-* 15 Author: Bryant Chou <bryant.chou@vungle.com>
-* 1 Author: Matt Coneybeare <coneybeare@gmail.com>
+check out lib/vunglepub/docs for the real docs
