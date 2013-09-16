@@ -1,6 +1,7 @@
 // MainViewController.h -- main view controller for test app
 // by allen brunson  january 9 2012
 
+#import <AVFoundation/AVFoundation.h>
 #import "MainView.h"
 
 
@@ -12,9 +13,9 @@
 
 @interface MainViewController: UIViewController <VGVunglePubDelegate>
 {
-    @private
-    
+@private
     MainView*  mainView;
+	AVAudioPlayer* _player;
 }
 
 // properties

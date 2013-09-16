@@ -76,20 +76,24 @@ int main(int argc, char** argv)
     return cntl;
 }
 
--(BOOL)application:(UIApplication*)application
- didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+-(BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    application.statusBarStyle  = UIStatusBarStyleBlackOpaque;
-    application.statusBarHidden = FALSE;
-    
     [self startWindow];
+
+//	if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+//		[application setStatusBarStyle:UIStatusBarStyleLightContent];
+//	} else {
+		application.statusBarStyle  = UIStatusBarStyleBlackOpaque;
+		application.statusBarHidden = FALSE;
+//	}
+
     [self vungleVersionTest];
     [VGVunglePub allowAutoRotate:TRUE];
     [self vungleStart];
   
     // this is for testing the VGDownload code
     VGReportDownload([Prefs pubAppIDGet]);
-    
+
     return TRUE;
 }
 

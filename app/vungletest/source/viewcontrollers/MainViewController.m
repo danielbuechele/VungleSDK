@@ -12,14 +12,13 @@
 
 -(void)buttonPlayAd:(id)sender
 {
-    if ([Prefs getIncentivized])
-    {
+    if ([Prefs getIncentivized]) {
         [VGVunglePub playIncentivizedAd:self animated:TRUE showClose:TRUE userTag:@"helloworld"];
     }
-    else
-    {
+    else {
         [VGVunglePub playModalAd:self animated:TRUE];
     }
+	[_player stop];
 }
 
 -(void)buttonPrefs:(id)sender
@@ -71,6 +70,15 @@
     
     [self.mainView.playButton addButtonTarget:self action:prc1];
     [self.mainView.prefsButton addButtonTarget:self action:prc2];
+	
+	// start playing background music
+	NSBundle *mainBundle = [NSBundle mainBundle];
+	NSString *filePath = [mainBundle pathForResource:@"Music" ofType:@"mp3"];
+	NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+	NSError *error = nil;
+	
+	_player = [[AVAudioPlayer alloc] initWithData:fileData error:&error];
+	[_player play];
 }
 
 -(void)viewDidUnload
@@ -93,7 +101,8 @@
 
 -(void)vungleViewDidDisappear:(UIViewController*)viewController
 {
-    // ad view is gone
+    // ad view is gone, resume music
+	[_player play];
 }
 
 -(void)vungleViewWillAppear:(UIViewController*)viewController
